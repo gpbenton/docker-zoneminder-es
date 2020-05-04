@@ -28,3 +28,23 @@ EXPOSE 80
 COPY utils/entrypoint.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Configure zmeventnotification
+WORKDIR /root
+RUN apt-get install -y git libyaml-perl make libjson-perl gcc
+RUN git clone https://github.com/pliablepixels/zmeventnotification.git
+WORKDIR /root/zmeventnotification
+RUN git fetch --tags
+RUN git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+EXPOSE 9000
+RUN perl -MCPAN -e "install Crypt::MySQL"
+RUN perl -MCPAN -e "install Config::IniFiles"
+RUN perl -MCPAN -e "install Crypt::Eksblowfish::Bcrypt"
+RUN perl -MCPAN -e "install Net::WebSocket::Server"
+RUN perl -MCPAN -e "install LWP::Protocol::https"
+RUN perl -MCPAN -e "install Net::MQTT::Simple"
+RUN chmod a+x ./zmeventnotification.pl
+
+RUN ./install.sh --no-interactive --install-es --no-install-hook --install-config --no-pysudo
+
+COPY utils/csresnext50-panet-spp-original-optimal_final.weights /var/lib/zmeventnotification/models/cspn
