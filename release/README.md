@@ -1,11 +1,13 @@
-# ZoneMinder Release Dockerfiles
-This folder contains Docker files used for running the latest ZoneMinder release.
-If you are looking to run the latest code from the master branch, see the [development](https://github.com/ZoneMinder/zmdockerfiles/tree/master/development) folder instead.
+# Zoneminder with Event Notification Server Dockerfile
+I needed a docker container with [Zoneminder](https://github.com/ZoneMinder/zoneminder) and the [Event Notification Server](https://github.com/pliablepixels/zmeventnotification) and this is the result.  Derived from the zoneminder official images.
 
-Contributions are welcome, but please follow these simple guidelines:
+No encryption is included.
 
-- Only one Dockerfile per distro
-- Keep each Dockerfile sorted by distro
-- Use our [entrypoint script](https://github.com/ZoneMinder/zmdockerfiles/blob/master/utils/entrypoint.sh) as the entrypoint in your Dockerfile. It is intended to work with most Linux distros and will take care of starting mysql, apache, then zoneminder.
-- Each Dockerfile should be self sufficient. It should grab the ZoneMinder project, and any other other requried files, from github or other online resource, rather than expect files to pre-exist on the filesystem.
-- Avoid building ZoneMinder. Instead, install ZoneMinder from a package, using a third party repo if necessary.
+# Build
+docker-compose build
+
+# Configure
+Update the zmeventnotification.ini
+
+# Run
+docker-compose up -d
